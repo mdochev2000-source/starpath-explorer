@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.mdochev.starpath'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.mdochev.starpath'
+        minSdk 24
+        targetSdk 34
+        versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger())
+        versionName "1.0." + (System.getenv('GITHUB_RUN_NUMBER') ?: '0')
+    }
+    signingConfigs {
+        starpath {
+            // постоянен ключ: новите версии се инсталират върху старата и прогресът остава
+            storeFile file('../starpath.keystore')
+            storePassword 'starpath'
+            keyAlias 'starpath'
+            keyPassword 'starpath'
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; signingConfig signingConfigs.starpath }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
